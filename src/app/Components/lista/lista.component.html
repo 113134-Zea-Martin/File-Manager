@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Archivos</h1>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Acciones
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="showForm()">Nuevo</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="borrarSelected()">Borrar</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Dueños</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of FileList; track $index) {
+      <tr>
+        <td>
+          <input type="checkbox" name="checkbox" (change)="onCheckboxChange(item, $event)"
+            [checked]="unchecks ? false : filesSelected.includes(item)" />
+        </td>
+        <td>
+          <i class="bi" [ngClass]="{
+              'bi-file-earmark': item.type === fileType.FILE,
+              'bi-folder': item.type === fileType.FOLDER
+            }"></i>
+          <span [title]="item.name">
+            {{
+            item.name.length > 10
+            ? item.name.substring(0, 10) + "..."
+            : item.name
+            }}
+          </span>
+        </td>
+        <td>{{ item.creation | date : "MMM d, yyyy" }}</td>
+
+        <td>
+          <div class="d-flex align-items-center">
+            @if (item.owners.length
+            < 3) { @for (own of item.owners; track $index) { <img [src]="own.avatarUrl" class="owner-avatar" />
+            }} @else { @for (own of item.owners | slice:0:3 ; track $index) {
+            <img [src]="own.avatarUrl" class="owner-avatar" />
+            }
+            <p class="remaining-owners">+ {{ item.owners.length - 3 }}</p>
+            }
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (toggleForm) {
+<div class="container">
+  <app-form (formClosed)="showForm()"></app-form>
+</div>
+}

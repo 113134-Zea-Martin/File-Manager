@@ -1,0 +1,52 @@
+<form>
+  <div class="mb-3">
+    <label for="nombreInput" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="nombreId" [(ngModel)]="name" name="nombre" />
+  </div>
+
+  <div class="mb-3">
+    <label for="fechaInput" class="form-label">Fecha</label>
+    <input type="date" class="form-control" id="fechaId" [(ngModel)]="creation" name="fecha" />
+  </div>
+
+  <div class="mb-3">
+    <label for="TipoArchivo" class="form-label">Tipo Archivo</label>
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedTipo" name="TipoArchivo">
+      <option [ngValue]="fileType.FOLDER">FOLDER</option>
+      <option [ngValue]="fileType.FILE">FILE</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="Carpeta" class="form-label">Carpeta</label>
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedCarpeta" name="Carpeta">
+      @for (item of fileItem; track $index) {
+        @if (item.type === fileType.FOLDER) {
+          <option [ngValue]="item.type">{{ item.name }}</option>
+        }
+      }
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="duenios" class="form-label">Dueños</label>
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDuenio[0]" name="duenios">
+      @for (own of fileOwner; track $index) {
+        <option [ngValue]="own">{{ own.name }}</option>
+      }
+    </select>
+    <button type="button" class="btn btn-secondary btn-sm" (click)="agregarDuenio()">+</button>
+    @for (num of cantDuenios; track $index) {
+      <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDuenio[$index + 1]" name="num.">
+        @for (own of fileOwner; track $index) {
+          <option [ngValue]="own">{{ own.name }}</option>
+        }
+      </select>
+    }
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <button type="submit" class="btn btn-primary" (click)="guardar()">Guardar</button>
+    <button type="button" class="btn btn-secondary" (click)="cerrarForm()">Volver</button>
+  </div>
+</form>
